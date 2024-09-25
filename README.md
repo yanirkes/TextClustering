@@ -16,13 +16,13 @@ claims into topics based on their content.
 1. Clone the repository:
 ```python
 git clone https://github.com/yourusername/patent-claim-scraper.git
-cd patent-claim-scraper
+cd TextClustering
 
 ```
 
 2. Create a virtual environment (optional but recommended):
 ```python
-python3 -m venv venv
+python3 -m venv venv # On Windows: virtualenv --python C:\Path\To\Python\python.exe venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 3. Install the required dependencies:
