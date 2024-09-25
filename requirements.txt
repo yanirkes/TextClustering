@@ -2,4 +2,4 @@ beautifulsoup4
 requests
 flask
 nltk
-sklearn
+scikit-learn

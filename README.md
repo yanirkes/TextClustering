@@ -15,7 +15,7 @@ claims into topics based on their content.
 # Installation
 1. Clone the repository:
 ```python
-git clone https://github.com/yourusername/patent-claim-scraper.git
+git clone https://github.com/yanirkes/TextClustering.git
 cd TextClustering
 
 ```
