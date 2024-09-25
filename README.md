@@ -22,7 +22,7 @@ cd TextClustering
 
 2. Create a virtual environment (optional but recommended):
 ```python
-python3 -m venv venv # On Windows: virtualenv --python python3 -m venv venv # On Windows: virtualenv --python "C:\Path\To\Python\python.exe" venv
+python3 -m venv venv # On Windows: virtualenv --python python3 -m venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 3. Install the required dependencies:
@@ -38,7 +38,7 @@ python -m nltk.downloader stopwords punkt
 
 # How to Use
 ## 1.  **Prepare URLs to Scrape** 
-In script there are urls ready tobe scrape, you can replace them with your own. 
+In the script there are urls ready to be scraped, you can replace them with your own. 
 
 ```python
 urls = [
@@ -64,13 +64,14 @@ Otherwise, you can download the save data located at the data directory named 'c
 ## 3. **Review Output**
 The claims will be saved as a CSV file in the data/ directory with the filename claims_text.csv.
 
-## 4. **Run the App****
+## 4. **Run the App**
 
 The app will be launched in your browser, after tuning the following in the terminal:
 
 ```python
 cd ../ # Go back to the root directory
-python src/app.py
+cd src
+python app.py
 ```
 
 Open the given URL on you local browser, and start using.
@@ -82,8 +83,8 @@ patent-claim-scraper/
 │
 ├── data/                   # Directory for saving scraped claims as CSV files
 │
-├── scrappe/          
-├──── scraper.py            # Main script to scrape patent claims
+├── scrppe/          
+├──── scraping.py            # Main script to scrape patent claims
 │
 ├── src/     
 │        
@@ -94,6 +95,8 @@ patent-claim-scraper/
 ├──── my_model.py           # Model class for clustering
 │
 ├── README.md               # This README file
+│
+└── Moveo_task_model_analysis.ipynb.txt        # Python dependencies for the project
 │
 └── requirements.txt        # Python dependencies for the project
 
