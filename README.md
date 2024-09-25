@@ -22,7 +22,7 @@ cd TextClustering
 
 2. Create a virtual environment (optional but recommended):
 ```python
-python3 -m venv venv # On Windows: virtualenv --python C:\Path\To\Python\python.exe venv
+python3 -m venv venv # On Windows: virtualenv --python python3 -m venv venv # On Windows: virtualenv --python "C:\Path\To\Python\python.exe" venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 3. Install the required dependencies:
@@ -37,8 +37,8 @@ python -m nltk.downloader stopwords punkt
 ```
 
 # How to Use
-## 1.  **Prepare URLs to Scrape**
-In the urls list within the script, add the patent URLs you want to scrape:
+## 1.  **Prepare URLs to Scrape** 
+In script there are urls ready tobe scrape, you can replace them with your own. 
 
 ```python
 urls = [
@@ -54,8 +54,11 @@ You can check the functionality of the scrapper by running the script. Once you 
 the URLs set, run the script to scrape the patent claims:
 
 ```python
-python scraper.py
+```python
+cd scrape
+python scrapping.py
 ```
+
 Otherwise, you can download the save data located at the data directory named 'claims_text.csv'.
 
 ## 3. **Review Output**
@@ -66,6 +69,7 @@ The claims will be saved as a CSV file in the data/ directory with the filename 
 The app will be launched in your browser, after tuning the following in the terminal:
 
 ```python
+cd ../ # Go back to the root directory
 python src/app.py
 ```
 

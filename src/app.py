@@ -1,3 +1,7 @@
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath('my_model.py'))))
+
 # external libraries
 from flask import Flask, request, jsonify, render_template_string
 import json
