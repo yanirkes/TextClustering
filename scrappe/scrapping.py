@@ -95,7 +95,7 @@ def save_claims_to_csv(claims, filename):
     Save the scraped and cleaned claims into a CSV file.
     Creates the directory if it doesn't exist and handles any I/O errors.
     """
-    group_data_path = os.path.join(cur_dir, 'Moveo', 'data', filename)
+    group_data_path = os.path.join(cur_dir, 'data', filename)
 
     # Ensure the directory exists
     os.makedirs(os.path.dirname(group_data_path), exist_ok=True)
