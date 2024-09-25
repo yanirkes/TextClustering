@@ -8,8 +8,8 @@ import random
 # Internal libraries
 from model import my_model
 
-
 app = Flask(__name__)
+
 
 # Route for the home page, which renders an HTML form for user input
 @app.route('/', methods=['GET'])
@@ -25,15 +25,22 @@ def home():
     '''
     return render_template_string(html)
 
+
 @app.route('/groups', methods=['POST'])
 def hello_user():
     # Get the number of groups from the submitted form
-    submits = request.form.get('groups', type=int)
+    k = request.form.get('groups', type=int)
 
     # Validate the input before proceeding
-    if validate_input(submits):
+    if validate_input(k):
+        local_model.build_model(k)
+
+        # Group the data by 'topic' and count the number of claims per topic
+        groups_distribution = local_model.df_.groupby('topic')['text'].count().reset_index().rename(
+            columns={'text': 'count'})
+
         # Select random groups based on user input
-        random_groups = random_group_selection(submits)
+        random_groups = random_group_selection(k)
 
         # Create the response dictionary with group details
         return_group_dict = {
@@ -60,25 +67,27 @@ def hello_user():
 def validate_input(submits):
     """
     Validate the user's input for the number of groups.
-    Ensures that the number is greater than 0 and less than or equal to the number of available groups.
+    Ensures that the number is greater than 0 and less than or equal to the number of available claims.
     """
     if submits <= 0:
         return False
-    elif submits > groups_distribution.shape[0]:
+    elif submits > corpus_df.shape[0]:
         return False
     return True
+
 
 # Function to select random groups
 def random_group_selection(number_of_groups):
     """
     Randomly select a number of unique groups based on user input.
     """
-    unique_groups = dbmodel.df_['topic'].nunique()
+    unique_groups = local_model.df_['topic'].nunique()
 
     # Randomly select a sample of group indices based on the available unique topics
     random_groups = random.sample(range(unique_groups), number_of_groups)
 
     return random_groups
+
 
 if __name__ == '__main__':
     # Get the path to the current file
@@ -92,10 +101,7 @@ if __name__ == '__main__':
     corpus_df = pd.read_csv(group_data_path)
 
     # Initialize the model with the loaded data
-    dbmodel = my_model.claimsModel(corpus_df)
-
-    # Group the data by 'topic' and count the number of claims per topic
-    groups_distribution = dbmodel.df_.groupby('topic')['text'].count().reset_index().rename(columns={'text': 'count'})
+    local_model = my_model.claimsModel(corpus_df)
 
     # Run the Flask app in debug mode
     app.run(debug=True)

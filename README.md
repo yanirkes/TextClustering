@@ -2,14 +2,14 @@
 This project provides an interactive web-based tool designed to scrape patent
 claims from multiple URLs, process and clean the text, and allow users
 to interact with an intuitive UI for grouping patent claims. The app uses a
-pre-trained DBSCAN clustering model in the backend to intelligently group patent 
+Kmeans clustering model in the backend to intelligently group patent 
 claims into topics based on their content.
 
 # Features 
 * Interactive UI: Users can specify the number of patent groups they want to view directly through the web interface.
 * Web Scraping: Scrapes claims from various patent URLs using requests and BeautifulSoup.
 * Text Processing: Cleans and processes the scraped claims using various NLP techniques, such as removing list numbers, standardizing claim references, and eliminating unnecessary text elements.
-* Clustering and Grouping: Uses a DBSCAN model to group patent claims by topic, allowing users to specify the number of groups they wish to view.
+* Clustering and Grouping: Uses a Kmeans clustering model to group patent claims by topic, allowing users to specify the number of groups they wish to view.
 
 
 # Installation
@@ -60,6 +60,16 @@ Otherwise, you can download the save data located at the data directory named 'c
 
 ## 3. **Review Output**
 The claims will be saved as a CSV file in the data/ directory with the filename claims_text.csv.
+
+## 4. **Run the App****
+
+The app will be launched in your browser, after tuning the following in the terminal:
+
+```python
+python src/app.py
+```
+
+Open the given URL on you local browser, and start using.
 
 # File Structure
 

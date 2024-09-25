@@ -8,8 +8,9 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
 import string
-from sklearn.cluster import DBSCAN
+from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 
 class claimsModel:
@@ -17,13 +18,13 @@ class claimsModel:
         """
         Initialize the claimsModel class with the input DataFrame.
         - Preprocess text data and store in 'processed_text' column.
-        - Initialize the TF-IDF vectorizer and DBSCAN model.
+        - Initialize the TF-IDF vectorizer and Kmeans model.
         """
         self.df_ = df_
         self.df_['processed_text'] = self.df_['text'].apply(self.preprocess_text)
         self.tf_model = TfidfVectorizer()
-        self.X = self.vectorize_x()  # Vectorize the preprocessed text
-        self.dbscan_model = self.build_model()  # Build DBSCAN model and assign clusters
+        self.X, self.cosine_similarities = self.vectorize_x()  # Vectorize the preprocessed text
+        self.kmeans_model = None  # Build Kmeans model and assign clusters
 
     @staticmethod
     def preprocess_text(text):
@@ -51,7 +52,9 @@ class claimsModel:
         Returns the transformed document-term matrix.
         """
         X = self.tf_model.fit_transform(self.df_['processed_text'])
-        return X
+        cosine_similarities = cosine_similarity(X)
+
+        return X, cosine_similarities
 
     def extract_top_keywords_per_cluster(self, num_keywords=2):
         """
@@ -60,7 +63,7 @@ class claimsModel:
         - Returns a dictionary mapping each cluster to its top keywords.
         """
         cluster_keywords = {}
-        clusters = self.df_['topic'].values  # Cluster labels from DBSCAN
+        clusters = self.df_['topic'].values  # Cluster labels from Kmeans
 
         for cluster_num in np.unique(clusters):
             if cluster_num == -1:
@@ -79,15 +82,16 @@ class claimsModel:
 
         return cluster_keywords
 
-    def build_model(self):
+    def build_model(self, k):
         """
-        Build and fit the DBSCAN model.
+        Build and fit the Kmeans model.
         - Assign cluster labels to the 'topic' column in the DataFrame.
         - Extract top keywords for each cluster and store them in 'topic'.
-        Returns the fitted DBSCAN model.
+        Returns the fitted Kmeans model.
         """
-        dbscan_model = DBSCAN(metric='cosine', eps=0.6, min_samples=4)
-        clusters = dbscan_model.fit_predict(self.X)
+        kmeans_model = KMeans(n_clusters=k, random_state=42)
+        kmeans_model.fit(self.cosine_similarities)
+        clusters = kmeans_model.predict(self.cosine_similarities)
         self.df_['topic'] = clusters  # Store cluster labels
 
         # Extract keywords and assign them to the 'topic' column
@@ -95,7 +99,7 @@ class claimsModel:
         cluster_keywords[-1] = 'others'  # Assign 'others' to noise points
         self.df_['topic'] = list(map(lambda x: cluster_keywords[x], self.df_['topic']))
 
-        return dbscan_model.fit(self.X)
+        return kmeans_model
 
     def predict(self, x):
         """
